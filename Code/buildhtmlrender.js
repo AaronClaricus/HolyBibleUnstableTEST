@@ -28,6 +28,14 @@ loadTextFile(
     "frameD",
     "./General Sources/Resources"
 );
+
+
+
+
+
+
+
+
 // ==============================
 // HIGHLIGHT SCHEME
 // ==============================
@@ -101,3 +109,33 @@ async function loadTextFile(
     handleIframeError(err, iframe);
 	}
 }
+
+
+
+
+
+// ==============================
+// Listen to scroll position
+// ==============================
+
+const iframe = document.getElementById("frameB");
+
+iframe.addEventListener("load", () => {
+
+    const iframeWindow =
+        iframe.contentWindow;
+
+    iframeWindow.addEventListener(
+        "scroll",
+        () => {
+
+            console.log(
+                "SCROLL:",
+                iframeWindow.scrollY
+            );
+
+        }
+    );
+
+});
+
