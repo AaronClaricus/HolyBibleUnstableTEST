@@ -10,7 +10,9 @@ const toggleButton =
 
 // current mode
 let layoutMode = 4;
-
+document.body.classList.add(
+    "four-panel"
+);
 // initial button text
 toggleButton.textContent =
     "Switch to 3 Panel Mode";
