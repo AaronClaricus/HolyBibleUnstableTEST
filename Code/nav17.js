@@ -10,10 +10,10 @@ const NAVIGATION = [
 		[
 			"Gospel",
 
-			["Matthew", "./WEB/Gospel/Matthew"],
-			["Mark", "./WEB/Gospel/Mark"],
-			["Luke", "./WEB/Gospel/Luke"],
-			["John", "./WEB/Gospel/John"]
+			["Matthew", "./WEB/Gospel/WEB Matthew"],
+			["Mark", "./WEB/Gospel/WEB Mark"],
+			["Luke", "./WEB/Gospel/WEB Luke"],
+			["John", "./WEB/Gospel/WEB John"]
 		],
 
 		[
@@ -608,10 +608,10 @@ const NAVIGATION = [
 // FRAME CONFIG
 // ==========================================
 const FRAMES = [
-    ["frameB", "LEFT"],
-    ["frameC", "CENTER"],
-    ["frameD", "RIGHT"],
-    ["frameE", "FAR RIGHT"],
+    ["frameB", "A"],
+    ["frameC", "B"],
+    ["frameD", "C"],
+    ["frameE", "D"],
 
 ];
 // ==========================================
@@ -645,6 +645,16 @@ function createTree(node){
 		// THREE PANEL TOGGLE ITEMS
 		// HIDE frameD CONTROLS
 		// ==============================
+		
+				// ==============================
+		// THREE PANEL TOGGLE ITEMS
+		// HIDE frameD CONTROLS
+		// ==============================
+		if(frame[0] === "frameD"){
+			frameLi.classList.add("center-item2");
+		}
+		
+		
 		// ==========================================
 // RECURSIVE BUILDER
 // ==========================================
@@ -672,13 +682,7 @@ function createTree(node){
 				"center-item"
 			);
 		}
-		// ==============================
-		// THREE PANEL TOGGLE ITEMS
-		// HIDE frameD CONTROLS
-		// ==============================
-		if(frame[0] === "frameD"){
-			frameLi.classList.add("center-item2");
-		}
+
 			const link =
 				document.createElement("span");
 			link.className = "file-link";
