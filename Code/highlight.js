@@ -39,6 +39,6 @@ highlightSelector.addEventListener(
         loadTextFile("frameB", currentFiles.frameB);
         loadTextFile("frameC", currentFiles.frameC);
         loadTextFile("frameD", currentFiles.frameD);
-
+		loadTextFile("frameE", currentFiles.frameD);
     }
 );
