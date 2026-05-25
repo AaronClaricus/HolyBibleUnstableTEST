@@ -3,7 +3,7 @@
 // TRACKING STORAGE
 // ==============================
 const currentFiles = {};
-
+const savedScrollPositions = {};
 
 
 
@@ -120,12 +120,6 @@ async function loadTextFile(
 	}
 }
 // DO NOT MODIFY ABOVE UNTIL WORKING
-//rev 15 drop in
-function getScrollStorageKey(frameId, file) {
-    return `scroll:${frameId}:${file}`;
-}
-
-//rev 15 drop in
 //rev 9 drop in
 
 function normalizeFileKey(file) {
@@ -134,9 +128,9 @@ function normalizeFileKey(file) {
 
 //rev 9 drop in
 // rev 8 drop in
-//rev 15 drop in
+
 // ==============================
-// RESTORE SCROLL POSITION
+// RESTORE SCROLL Position 
 // ==============================
 function restoreScrollPosition(frameId, iframe) {
 
@@ -146,29 +140,20 @@ function restoreScrollPosition(frameId, iframe) {
         console.log("[RESTORE BLOCKED] No file for", frameId);
         return;
     }
-
-    const key = getScrollStorageKey(frameId, file);
-
-    const scrollY =
-        Number(localStorage.getItem(key));
-
-    if (isNaN(scrollY)) {
-        console.log(
-            "[RESTORE SKIPPED] No saved position for",
-            key
-        );
+	// rev 13 drop in
+	const scrollY = Number(localStorage.getItem("scroll:" + file));
+	if (isNaN(scrollY))
+	// rev 13 drop in
+    if (typeof scrollY !== "number") {
+        console.log("[RESTORE SKIPPED] No saved position for", file);
         return;
     }
 
-    const iframeWindow =
-        iframe.contentWindow;
+    const iframeWindow = iframe.contentWindow;
 
-    requestAnimationFrame(() => {
-
-        iframeWindow.scrollTo(
-            0,
-            scrollY
-        );
+    // ensure layout is ready
+    setTimeout(() => {
+        iframeWindow.scrollTo(0, scrollY);
 
         console.log(
             "[RESTORED]",
@@ -176,10 +161,8 @@ function restoreScrollPosition(frameId, iframe) {
             file,
             scrollY
         );
-
-    });
+    }, 0);
 }
-// rev 15 drop in
 // rev 8 drop in
 
 
@@ -218,26 +201,25 @@ function attachScrollTracking(frameId) {
                 return;
             }
 			// rev 9 and 10 drop in
-			
-			// rev 15 drop in
-			
-			const key =
-				getScrollStorageKey(
-					frameId,
-					currentFile
-				);
-
+			// rev 13 drop in
 			localStorage.setItem(
-				key,
+				"scroll:" + currentFile,
 				iframeWindow.scrollY
+			);
+			// rev 13 drop in
+			console.log(
+				"SAVED:",
+				currentFile,
+				savedScrollPositions[currentFile]
 			);
 
-			console.log(
-				"[SCROLL SAVED]",
-				key,
-				iframeWindow.scrollY
-			);
-            // rev 15 drop in
+			const scrollY = savedScrollPositions[currentFile];
+			// rev 9 drop in
+            console.log(
+                "SAVED:",
+                currentFile,
+                savedScrollPositions[currentFile]
+            );
         };
         // rev 8 drop in
         
@@ -247,6 +229,47 @@ function attachScrollTracking(frameId) {
     });
 }
 
+// ==============================
+// APPLY TO ALL FRAMES
+// ==============================
+["frameB", "frameC", "frameD","frameE"]
+    .forEach(attachScrollTracking);
 
 
 
+// ==============================
+// SCROLL SAVE FUNCTION
+// ==============================
+function saveScrollPosition(frameId, scrollY) {
+
+    const file =
+        currentFiles[frameId];
+
+    console.log(
+        "[SCROLL SAVE TRIGGERED]",
+        "frame:",
+        frameId,
+        "file:",
+        file,
+        "scrollY:",
+        scrollY
+    );
+
+    if (!file) {
+        console.log(
+            "[SCROLL SAVE BLOCKED] No file for",
+            frameId
+        );
+        return;
+    }
+
+    savedScrollPositions[file] =
+        scrollY;
+
+    console.log(
+        "[SCROLL SAVED]",
+        file,
+        "=>",
+        savedScrollPositions[file]
+    );
+}
