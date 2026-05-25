@@ -131,13 +131,7 @@ function normalizeFileKey(file) {
 function restoreScrollPosition(frameId, iframe) {
 
     const file = currentFiles[frameId];
-	// rev 12 drop in
-	if (saved !== null) {
-		iframeWindow.scrollTo(0, Number(saved));
-	}
 
-
-	// rev 12 drop in
     if (!file) {
         console.log("[RESTORE BLOCKED] No file for", frameId);
         return;
@@ -184,10 +178,7 @@ function attachScrollTracking(frameId) {
 
         const iframeWindow =
             iframe.contentWindow;
-		// rev 12 drop in
-		const saved = localStorage.getItem("scroll:" + file);
 
-		// rev 12 drop in
         iframeWindow.onscroll = () => {
 
             console.log(
@@ -262,12 +253,6 @@ function saveScrollPosition(frameId, scrollY) {
         );
         return;
     }
-    // rev 12 drop in
-	localStorage.setItem(
-	  "scroll:" + currentFile,
-	  iframeWindow.scrollY
-	);    
-    // rev 12 drop in
 
     savedScrollPositions[file] =
         scrollY;

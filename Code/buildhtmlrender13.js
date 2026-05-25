@@ -131,20 +131,15 @@ function normalizeFileKey(file) {
 function restoreScrollPosition(frameId, iframe) {
 
     const file = currentFiles[frameId];
-	// rev 12 drop in
-	if (saved !== null) {
-		iframeWindow.scrollTo(0, Number(saved));
-	}
 
-
-	// rev 12 drop in
     if (!file) {
         console.log("[RESTORE BLOCKED] No file for", frameId);
         return;
     }
-
-    const scrollY = savedScrollPositions[file];
-
+	// rev 13 drop in
+	const scrollY = Number(localStorage.getItem("scroll:" + file));
+	if (isNaN(scrollY))
+	// rev 13 drop in
     if (typeof scrollY !== "number") {
         console.log("[RESTORE SKIPPED] No saved position for", file);
         return;
@@ -184,10 +179,7 @@ function attachScrollTracking(frameId) {
 
         const iframeWindow =
             iframe.contentWindow;
-		// rev 12 drop in
-		const saved = localStorage.getItem("scroll:" + file);
 
-		// rev 12 drop in
         iframeWindow.onscroll = () => {
 
             console.log(
@@ -205,8 +197,12 @@ function attachScrollTracking(frameId) {
                 return;
             }
 			// rev 9 and 10 drop in
-			savedScrollPositions[currentFile] = iframeWindow.scrollY;
-
+			// rev 13 drop in
+			localStorage.setItem(
+				"scroll:" + currentFile,
+				iframeWindow.scrollY
+			);
+			// rev 13 drop in
 			console.log(
 				"SAVED:",
 				currentFile,
@@ -262,12 +258,6 @@ function saveScrollPosition(frameId, scrollY) {
         );
         return;
     }
-    // rev 12 drop in
-	localStorage.setItem(
-	  "scroll:" + currentFile,
-	  iframeWindow.scrollY
-	);    
-    // rev 12 drop in
 
     savedScrollPositions[file] =
         scrollY;
